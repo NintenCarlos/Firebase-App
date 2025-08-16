@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>ESP IoT Firebase App</title>
+
+      <!-- Firebase -->
+      <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+
+      <!-- Firebase features -->
+      <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+
+      <link href="styles.css" rel="stylesheet" />
+
+      <script>
+         // IMPORTANT!!! Replace with your app config object
+         const firebaseConfig = {
+            apiKey: "AIzaSyCfothMEXQSObkpi-Dtr8oYzDORQqeznLo",
+            authDomain: "proyectoiot2-6e7d8.firebaseapp.com",
+            databaseURL:
+               "https://proyectoiot2-6e7d8-default-rtdb.firebaseio.com",
+            projectId: "proyectoiot2-6e7d8",
+            storageBucket: "proyectoiot2-6e7d8.firebasestorage.app",
+            messagingSenderId: "978485640164",
+            appId: "1:978485640164:web:a1624ef51fc4003eb2a5f1",
+         };
+
+         // Initialize firebase
+         firebase.initializeApp(firebaseConfig);
+
+         // Make auth and database references
+         const auth = firebase.auth();
+         const db = firebase.database();
+      </script>
+
+      <link
+         href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+         rel="stylesheet"
+         integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+         crossorigin="anonymous"
+      />
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   </head>
+   <body class="min-vh-100 d-flex flex-column justify-content-between">
+      <!-- NAVBAR -->
+      <nav class="navbar">
+         <div class="panel">Panel de Sensores</div>
+         <div class="logout" id="navbarNav">
+            <ul class="navbar-nav">
+               <li class="nav-item">
+                  <a class="nav-link" href="#" id="login-link">
+                     <button
+                        id="loginBtn"
+                        class="btn btn-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#login-modal"
+                     >
+                        Login
+                     </button>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a
+                     class="nav-link"
+                     href="#"
+                     id="logout-link"
+                     style="display: none"
+                  >
+                     <button
+                        id="logoutBtn"
+                        class="btn btn-danger navbar-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#logout-modal"
+                     >
+                        Logout
+                     </button>
+                  </a>
+               </li>
+            </ul>
+            <span class="navbar-text" id="user-details" style="display: none">
+               User details
+            </span>
+         </div>
+      </nav>
+
+      <!-- LOGIN MODAL -->
+      <div
+         class="modal fade"
+         id="login-modal"
+         tabindex="-1"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true"
+      >
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title">Login</h5>
+                  <button
+                     type="button"
+                     class="btn-close"
+                     data-bs-dismiss="modal"
+                     aria-label="Close"
+                  ></button>
+               </div>
+               <div class="modal-body">
+                  <p>Ingresa tus datos para iniciar sesión.</p>
+                  <form id="login-form">
+                     <div class="mb-3">
+                        <label for="inputEmail" class="form-label"
+                           >Correo Electrónico</label
+                        >
+                        <input
+                           type="email"
+                           class="form-control"
+                           id="input-email"
+                        />
+                     </div>
+                     <div class="mb-3">
+                        <label for="inputPassword" class="form-label"
+                           >Contraseña</label
+                        >
+                        <input
+                           type="password"
+                           class="form-control"
+                           id="input-password"
+                        />
+                     </div>
+                     <button type="submit" class="btn btn-primary">
+                        Iniciar Sesión
+                     </button>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- LOGOUT MODAL -->
+      <div class="modal fade" id="logout-modal" tabindex="-1">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title">Cerrar sesión</h5>
+                  <button
+                     type="button"
+                     class="btn-close"
+                     data-bs-dismiss="modal"
+                     aria-label="Close"
+                  ></button>
+               </div>
+               <div class="modal-body">
+                  <p>¿Quieres cerrar sesión?</p>
+               </div>
+               <div class="modal-footer">
+                  <button
+                     id="logout"
+                     type="button"
+                     class="btn btn-danger"
+                     data-bs-dismiss="modal"
+                  >
+                     Salir
+                  </button>
+                  <button
+                     type="button"
+                     class="btn btn-secondary"
+                     data-bs-dismiss="modal"
+                  >
+                     Cancelar
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div id="signedOutMessage" class="text-center" style="display: none">
+         Inicia sesión para ver el panel.
+      </div>
+      <!-- DASHBOARD WHEN LOGGED IN -->
+      <div class="dashboard" id="dashboardSignedIn" style="display: none">
+         <div class="sensor">
+            <div class="sensor-contenedor">
+               <p class="texto-sensor">Temperatura</p>
+               <p class="datos-sensor" id="bmeTemp">--</p>
+            </div>
+            <div class="sensor-contenedor">
+               <p class="texto-sensor">Humedad</p>
+               <p class="datos-sensor" id="bmeHumi">--</p>
+            </div>
+         </div>
+
+         <div class="controles">
+            <div class="intensidad">
+               <p class="texto-control">Control PWM</p>
+               <div class="rango">
+                  <p>Intensificador 1</p>
+                  <input
+                     id="sld1"
+                     class="range"
+                     type="range"
+                     min="0"
+                     max="100"
+                  />
+                  <p id="sld1Value">--%</p>
+               </div>
+               <div class="rango">
+                  <p>Intensificador 2</p>
+                  <input
+                     id="sld2"
+                     class="range"
+                     type="range"
+                     min="0"
+                     max="100"
+                  />
+                  <p id="sld2Value">--%</p>
+               </div>
+            </div>
+
+            <div class="botones">
+               <p class="texto-control">Control de Dispositivo</p>
+               <div class="boton">
+                  <p>Botón 1 Estado: </p>
+                  <p id="btn1State"> </p>
+                  <button class="on" id="btn1On">On</button>
+                  <button class="off" id="btn1Off">Off</button>
+               </div>
+               <div class="boton">
+                  <p>Botón 2 Estado: </p>
+                  <p id="btn2State"> </p>
+                  <button class="on" id="btn2On">On</button>
+                  <button class="off" id="btn2Off">Off</button>
+               </div>
+            </div>
+         </div>
+
+         <div class="mensaje-container">
+            <p class="texto-mensaje">Mensaje:</p>
+            <p id="input1Text" class="text"></p>
+            <input class="db" id="input1" />
+         </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="container footer navbar-fixed-bottom">
+         <footer class="text-center text-lg-start">
+            <div class="text-center p-3">
+               Powered by:
+               <a class="text-dark" href="https://www.youtube.com/watch?v=vuP-HfnWi1A"
+                  >Los más Duros de Durango: (Fer, Vic, Erik, Luis, Charly) </a
+               >
+            </div>
+         </footer>
+      </div>
+
+      <script
+         src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+         integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+         crossorigin="anonymous"
+      ></script>
+      <script src="scripts/auth.js"></script>
+      <script src="scripts/index.js"></script>
+   </body>
+</html>

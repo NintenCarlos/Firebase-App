@@ -1,0 +1,178 @@
+html, body{
+    height: 100%;
+    margin: 0;
+    background: #A8FCF2;
+    background: linear-gradient(0deg, rgba(168, 252, 242, 1) 1%, rgba(92, 207, 248, 1) 50%, rgba(2, 158, 253, 1) 100%);
+}
+
+.navbar{
+    display: flex;
+    padding: 30px;
+    margin-left: 300px;
+    margin-right: 300px;
+    margin-top: 20px;
+    justify-content: space-between;
+    border-bottom: 1px solid white;
+    
+}
+
+.panel{
+    font-size: 45px;
+    font-family: sans-serif;
+    color: white;
+    font-weight: bold;
+}
+
+.logout{
+    display: flex;
+    align-items: center;
+    color: white;
+    gap: 10px;
+  
+}
+
+
+.sensor{
+    display: flex;
+    justify-content: center;
+    align-content: space-between;
+    text-align: center;
+    
+}
+
+.sensor-contenedor{
+    margin-left: 2%;
+    margin-right: 2%;
+    background-color: #95d6ff;
+    Color: white;
+    width: 25%;
+    padding: 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.texto-sensor{
+    font-size: 30px;
+    margin-bottom: 10px;
+    
+}
+
+.datos-sensor{
+    font-size: 45px;
+    margin-top: 0;
+}
+
+
+.controles{
+    display: flex;
+    font-weight: bold;
+    color: white;
+    justify-content: center;
+    align-content: space-between;
+    text-align: left;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.intensidad{
+    width: 30%;
+    padding: 20px;
+    border-radius: 5%;
+    margin-right: 2%;
+    
+    
+}
+
+.rango{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: lighter;
+}
+
+.range{
+    width: 55%
+}
+
+.botones{
+    width: 30%;
+    padding: 20px;
+    border-radius: 5%;
+    font-weight: bold;
+    gap: 10;
+    
+}
+
+.texto-control{
+    margin-bottom: 0;
+    font-size: 30px;
+}
+.boton{
+    font-weight: lighter;
+    display: flex;
+    align-items: center;
+    gap: 10;
+    
+}
+
+.on{
+    width: 20%;
+    height: fit-content;
+    background-color: rgba(26, 255, 114, 0.767);
+    border-radius: 25px;
+    padding: 1%;
+    margin-left: 10%;
+    color: white;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.off{
+    width: 20%;
+    height: fit-content;
+    background-color: #ff1a1ac4;
+    border-radius: 25px;
+    padding: 1%;
+    margin-left: 5%;
+    color: white;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.mensaje-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1%; 
+    gap: 1px;
+    flex-direction: column;
+}
+
+.texto-mensaje{
+    font-size: 30px;
+    color: white;
+}
+
+.db{
+    border-radius: 25px;
+    border-width: 0;
+    padding: 5px;
+    color: black;
+    background-color: #CFFFFD;
+    width: 40%;
+    font-size: 20px;
+    text-align: center;
+    
+}
+
+button:active {
+    box-shadow: inset 0 4px 6px rgba(0,0,0,0.2);
+    transform: scale(0.96);
+}
+
+.sensor-contenedor:active {
+    box-shadow: inset 0 4px 6px rgba(0,0,0,0.2);
+    transform: scale(0.96);
+}
